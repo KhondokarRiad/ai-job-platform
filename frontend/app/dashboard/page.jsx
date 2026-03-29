@@ -64,9 +64,9 @@ export default function DashboardPage() {
       icon: "📊",
       title: "Skill Gap",
       desc: "কোন skills শিখতে হবে জানুন",
-      path: "/jobs",
+      path: "/progress",
       color: "from-orange-600 to-orange-800",
-      badge: "Coming Soon"
+      badge: "New"
     },
     {
       icon: "📚",
