@@ -96,7 +96,7 @@ export default function DashboardPage() {
             <span className="text-2xl">🎯</span>
             <div>
               <h1 className="text-white font-bold text-xl">SkillBridge</h1>
-              <p className="text-blue-300 text-xs">AI-Powered Career Platform</p>
+              <p className="text-purple-300 text-xs">AI-Powered Career Development Platform</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
