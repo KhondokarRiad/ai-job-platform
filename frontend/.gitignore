@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+ai-job-platform/backend/.env
+ai-job-platform/backend/__pycache__/
+ai-job-platform/backend/venv/
+ai-job-platform/frontend/node_modules/
+ai-job-platform/frontend/.next/
+*.pyc
+node_modules/
+.next/
+out/
+.env*
