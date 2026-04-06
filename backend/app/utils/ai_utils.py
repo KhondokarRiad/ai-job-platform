@@ -7,6 +7,25 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+def get_model_name():
+    return os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+
+
+def parse_json_response(text: str, fallback: dict):
+    try:
+        text = text.strip()
+        if "```json" in text:
+            text = text.split("```json")[1].split("```")[0].strip()
+        elif "```" in text:
+            text = text.split("```")[1].split("```")[0].strip()
+        return json.loads(text)
+    except Exception as e:
+        print("Gemini error:", repr(e))
+        return fallback
+
+def get_model_name():
+    return os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+
 def get_client():
     return genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
@@ -43,7 +62,7 @@ def extract_skills_with_ai(resume_text: str) -> dict:
         }}
         Resume: {resume_text[:3000]}
         """
-        response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
+        response = client.models.generate_content(model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"), contents=prompt)
         text = response.text.strip()
         if "```json" in text:
             text = text.split("```json")[1].split("```")[0].strip()
@@ -51,7 +70,7 @@ def extract_skills_with_ai(resume_text: str) -> dict:
             text = text.split("```")[1].split("```")[0].strip()
         return json.loads(text)
     except Exception as e:
-        print(f"AI Error: {e}")
+        print("Gemini error:", repr(e))
         return {"skills": [], "education": [], "experience": [], "summary": "AI analysis failed"}
 
 
@@ -81,7 +100,7 @@ def get_job_recommendations_ai(skills: list, job_role: str, industry: str, exper
 
         ৫টা job recommendation দাও।
         """
-        response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
+        response = client.models.generate_content(model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"), contents=prompt)
         text = response.text.strip()
         if "```json" in text:
             text = text.split("```json")[1].split("```")[0].strip()
@@ -89,7 +108,7 @@ def get_job_recommendations_ai(skills: list, job_role: str, industry: str, exper
             text = text.split("```")[1].split("```")[0].strip()
         return json.loads(text)
     except Exception as e:
-        print(f"AI Error: {e}")
+        print("Gemini error:", repr(e))
         return {"recommendations": [], "total_match": 0}
 
 
@@ -113,7 +132,7 @@ def analyze_job_description_ai(job_description: str, job_title: str, user_skills
         Job Description: {job_description[:2000]}
         ইউজারের Skills: {", ".join(user_skills) if user_skills else "None"}
         """
-        response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
+        response = client.models.generate_content(model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"), contents=prompt)
         text = response.text.strip()
         if "```json" in text:
             text = text.split("```json")[1].split("```")[0].strip()
@@ -121,7 +140,7 @@ def analyze_job_description_ai(job_description: str, job_title: str, user_skills
             text = text.split("```")[1].split("```")[0].strip()
         return json.loads(text)
     except Exception as e:
-        print(f"AI Error: {e}")
+        print("Gemini error:", repr(e))
         return {
             "required_skills": [],
             "matching_skills": [],
@@ -129,3 +148,74 @@ def analyze_job_description_ai(job_description: str, job_title: str, user_skills
             "readiness_percentage": 0,
             "summary": "AI analysis failed"
         }
+def get_learning_recommendations_ai(missing_skills: list, job_title: str) -> dict:
+    try:
+        client = get_client()
+
+        prompt = f"""
+        একজন job seeker এর missing skills এর উপর ভিত্তি করে learning recommendations দাও।
+        শুধু valid JSON return করবে।
+
+        Output format:
+        {{
+          "courses": [
+            {{
+              "title": "course title",
+              "provider": "Coursera/Udemy/etc",
+              "url": "https://example.com",
+              "skill": "Python",
+              "description": "short description"
+            }}
+          ],
+          "certifications": [
+            {{
+              "title": "certification title",
+              "provider": "Google/AWS/etc",
+              "url": "https://example.com",
+              "skill": "Cloud",
+              "description": "short description"
+            }}
+          ],
+          "projects": [
+            {{
+              "title": "project title",
+              "provider": "Self Practice",
+              "url": "",
+              "skill": "React",
+              "description": "short description"
+            }}
+          ]
+        }}
+
+        Job Title: {job_title}
+        Missing Skills: {", ".join(missing_skills) if missing_skills else "None"}
+
+        Rules:
+        - 3 courses
+        - 2 certifications
+        - 2 projects
+        - realistic, short, simple
+        - valid JSON only
+        """
+
+        response = client.models.generate_content(
+            model=get_model_name(),
+            contents=prompt
+        )
+
+        fallback = {
+            "courses": [],
+            "certifications": [],
+            "projects": []
+        }
+
+        return parse_json_response(response.text, fallback)
+
+    except Exception as e:
+        print("Gemini error:", repr(e))
+        return {
+            "courses": [],
+            "certifications": [],
+            "projects": []
+        }    
+    

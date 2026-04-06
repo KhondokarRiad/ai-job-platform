@@ -45,12 +45,12 @@ export default function JobsPage() {
       });
       const data = await res.json();
       if (res.ok) {
-        setMessage("✅ Job preference সেভ হয়েছে!");
+        setMessage("✅ Job preference saved!");
         setActiveTab("recommendations");
       } else {
         setMessage(`❌ ${data.detail}`);
       }
-    } catch { setMessage("❌ সার্ভারের সাথে সংযোগ নেই!"); }
+    } catch { setMessage("❌ No connection to server!"); }
     finally { setLoading(false); }
   };
 
@@ -66,12 +66,12 @@ export default function JobsPage() {
       if (res.ok) {
         setRecommendations(data.recommendations || []);
         if (data.recommendations?.length === 0) {
-          setMessage("⚠️ কোনো recommendation পাওয়া যায়নি!");
+          setMessage("⚠️ No recommendation found!");
         }
       } else {
         setMessage(`❌ ${data.detail}`);
       }
-    } catch { setMessage("❌ সার্ভারের সাথে সংযোগ নেই!"); }
+    } catch { setMessage("❌ No connection to the server!"); }
     finally { setLoading(false); }
   };
 
@@ -92,11 +92,11 @@ export default function JobsPage() {
       const data = await res.json();
       if (res.ok) {
         setAnalysisResult(data);
-        setMessage("✅ Job Description বিশ্লেষণ হয়েছে!");
+        setMessage("✅ Job Description analyzed!");
       } else {
         setMessage(`❌ ${data.detail}`);
       }
-    } catch { setMessage("❌ সার্ভারের সাথে সংযোগ নেই!"); }
+    } catch { setMessage("❌ No connection to the server!"); }
     finally { setLoading(false); }
   };
 
@@ -109,7 +109,7 @@ export default function JobsPage() {
           <h1 className="text-3xl font-bold text-white">💼 Job Recommendation</h1>
           <button onClick={() => router.push("/dashboard")}
             className="bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/40 text-blue-300 px-4 py-2 rounded-lg text-sm transition">
-            ← ড্যাশবোর্ড
+            ← Dashboard
           </button>
         </div>
 
@@ -140,14 +140,14 @@ export default function JobsPage() {
         {/* Tab 1: Preferences */}
         {activeTab === "preferences" && (
           <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8">
-            <h2 className="text-xl font-semibold text-white mb-6">🎯 আপনার Job Preference দিন</h2>
+            <h2 className="text-xl font-semibold text-white mb-6">🎯 Provide you Job Preference</h2>
             <form onSubmit={handleSavePreference} className="space-y-4">
               <div>
-                <label className="block text-blue-200 text-sm mb-1">পছন্দের Job Role</label>
+                <label className="block text-blue-200 text-sm mb-1">Preferred Job Role</label>
                 <input type="text" required
                   value={preference.job_role}
                   onChange={(e) => setPreference({...preference, job_role: e.target.value})}
-                  placeholder="যেমন: Backend Developer, Data Scientist"
+                  placeholder="For example: Backend Developer, Data Scientist"
                   className="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition"
                 />
               </div>
@@ -156,7 +156,7 @@ export default function JobsPage() {
                 <input type="text"
                   value={preference.industry}
                   onChange={(e) => setPreference({...preference, industry: e.target.value})}
-                  placeholder="যেমন: Technology, Finance, Healthcare"
+                  placeholder="For example: Technology, Finance, Healthcare"
                   className="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition"
                 />
               </div>
@@ -166,14 +166,14 @@ export default function JobsPage() {
                   value={preference.experience_level}
                   onChange={(e) => setPreference({...preference, experience_level: e.target.value})}
                   className="w-full bg-slate-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition">
-                  <option value="entry">Entry Level (০-২ বছর)</option>
-                  <option value="mid">Mid Level (২-৫ বছর)</option>
-                  <option value="senior">Senior Level (৫+ বছর)</option>
+                  <option value="entry">Entry Level (0-2 years)</option>
+                  <option value="mid">Mid Level (2-5 years)</option>
+                  <option value="senior">Senior Level (5+ years)</option>
                 </select>
               </div>
               <button type="submit" disabled={loading}
                 className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 text-white font-semibold py-3 rounded-lg transition">
-                {loading ? "⏳ সেভ হচ্ছে..." : "💾 Preference সেভ করুন"}
+                {loading ? "⏳ Saving..." : "💾 Save Preference"}
               </button>
             </form>
           </div>
@@ -184,7 +184,7 @@ export default function JobsPage() {
           <div className="space-y-4">
             <button onClick={handleGetRecommendations} disabled={loading}
               className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 text-white font-semibold py-3 rounded-lg transition">
-              {loading ? "⏳ AI বিশ্লেষণ করছে..." : "🤖 AI Job Recommendations নিন"}
+              {loading ? "⏳ AI analyzing..." : "🤖 Get AI Job Recommendations"}
             </button>
 
             {recommendations.length > 0 && recommendations.map((job, i) => (
@@ -220,23 +220,23 @@ export default function JobsPage() {
                   <input type="text" required
                     value={jobDesc.job_title}
                     onChange={(e) => setJobDesc({...jobDesc, job_title: e.target.value})}
-                    placeholder="যেমন: Senior React Developer"
+                    placeholder="For example: Senior React Developer"
                     className="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition"
                   />
                 </div>
                 <div>
-                  <label className="block text-blue-200 text-sm mb-1">Job Description paste করুন</label>
+                  <label className="block text-blue-200 text-sm mb-1">Paste the Job Description</label>
                   <textarea required
                     value={jobDesc.job_description}
                     onChange={(e) => setJobDesc({...jobDesc, job_description: e.target.value})}
                     rows={6}
-                    placeholder="Job description এখানে paste করুন..."
+                    placeholder="Paste the Job description here..."
                     className="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-400 transition resize-none"
                   />
                 </div>
                 <button type="submit" disabled={loading}
                   className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 text-white font-semibold py-3 rounded-lg transition">
-                  {loading ? "⏳ AI বিশ্লেষণ করছে..." : "🔍 Analyze করুন"}
+                  {loading ? "⏳ AI analyzing..." : "🔍 Analyze"}
                 </button>
               </form>
             </div>
@@ -244,7 +244,7 @@ export default function JobsPage() {
             {/* Analysis Result */}
             {analysisResult && (
               <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8">
-                <h2 className="text-xl font-semibold text-white mb-6">📊 বিশ্লেষণের ফলাফল</h2>
+                <h2 className="text-xl font-semibold text-white mb-6">📊 Analysis results</h2>
 
                 {/* Readiness */}
                 <div className="mb-6">
@@ -262,7 +262,7 @@ export default function JobsPage() {
                 {/* Matching Skills */}
                 {analysisResult.matching_skills?.length > 0 && (
                   <div className="mb-4">
-                    <p className="text-green-300 text-sm font-semibold mb-2">✅ আপনার আছে:</p>
+                    <p className="text-green-300 text-sm font-semibold mb-2">✅ Skills:</p>
                     <div className="flex flex-wrap gap-2">
                       {analysisResult.matching_skills.map((skill, i) => (
                         <span key={i} className="bg-green-600/30 border border-green-500/40 text-green-200 px-3 py-1 rounded-full text-sm">
@@ -276,7 +276,7 @@ export default function JobsPage() {
                 {/* Missing Skills */}
                 {analysisResult.missing_skills?.length > 0 && (
                   <div className="mb-4">
-                    <p className="text-red-300 text-sm font-semibold mb-2">❌ যা শিখতে হবে:</p>
+                    <p className="text-red-300 text-sm font-semibold mb-2">❌ Missing Skills:</p>
                     <div className="space-y-2">
                       {analysisResult.missing_skills.map((item, i) => (
                         <div key={i} className="flex justify-between items-center bg-white/5 rounded-lg px-4 py-2">
@@ -296,7 +296,7 @@ export default function JobsPage() {
                 {/* Summary */}
                 {analysisResult.summary && (
                   <div className="bg-white/5 rounded-xl p-4">
-                    <p className="text-blue-300 text-xs mb-1">📝 সারসংক্ষেপ:</p>
+                    <p className="text-blue-300 text-xs mb-1">📝 Summary:</p>
                     <p className="text-white text-sm">{analysisResult.summary}</p>
                   </div>
                 )}

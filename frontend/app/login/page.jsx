@@ -20,11 +20,11 @@ export default function LoginPage() {
         body: JSON.stringify(form),
       });
       const data = await res.json();
-      if (!res.ok) { setError(data.detail || "লগইন ব্যর্থ!"); return; }
+      if (!res.ok) { setError(data.detail || "Login failled!"); return; }
       localStorage.setItem("token", data.access_token);
       localStorage.setItem("user", JSON.stringify(data.user));
       router.push("/dashboard");
-    } catch { setError("সার্ভারের সাথে সংযোগ নেই!"); }
+    } catch { setError("No connection to the server!"); }
     finally { setLoading(false); }
   };
 
@@ -160,7 +160,7 @@ export default function LoginPage() {
 
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">Again Welcome 👋</h1>
-            <p className="text-white/40 text-sm">আপনার অ্যাকাউন্টে লগইন করুন</p>
+            <p className="text-white/40 text-sm">Login to your account</p>
           </div>
 
           {error && (
@@ -172,7 +172,7 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-white/60 text-sm mb-2 font-medium">ইমেইল</label>
+              <label className="block text-white/60 text-sm mb-2 font-medium">Email</label>
               <input type="email" required
                 value={form.email}
                 onChange={(e) => setForm({...form, email: e.target.value})}
@@ -182,11 +182,11 @@ export default function LoginPage() {
               />
             </div>
             <div>
-              <label className="block text-white/60 text-sm mb-2 font-medium">পাসওয়ার্ড</label>
+              <label className="block text-white/60 text-sm mb-2 font-medium">Password</label>
               <input type="password" required
                 value={form.password}
                 onChange={(e) => setForm({...form, password: e.target.value})}
-                placeholder="আপনার পাসওয়ার্ড"
+                placeholder="Your password"
                 className="w-full rounded-xl px-4 py-3.5 text-white placeholder-white/20 border border-white/10 focus:outline-none focus:border-purple-500/60 transition text-sm"
                 style={{background: "rgba(255,255,255,0.05)"}}
               />
@@ -195,14 +195,14 @@ export default function LoginPage() {
             <button type="submit" disabled={loading}
               className="w-full py-3.5 rounded-xl text-white font-semibold text-sm transition hover:opacity-90 disabled:opacity-50"
               style={{background: "linear-gradient(135deg, #e94560, #533483)"}}>
-              {loading ? "⏳ লগইন হচ্ছে..." : "🔐 লগইন করুন"}
+              {loading ? "⏳ Logging..." : "🔐 Login"}
             </button>
           </form>
 
           <p className="text-center text-white/40 text-sm mt-6">
-            অ্যাকাউন্ট নেই?{" "}
+            Don't have an account?{" "}
             <Link href="/register" className="font-semibold" style={{color: "#e94560"}}>
-              রেজিস্ট্রেশন করুন
+              Register
             </Link>
           </p>
         </div>

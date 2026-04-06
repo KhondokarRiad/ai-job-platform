@@ -19,7 +19,7 @@ export default function ResumePage() {
     if (selected) {
       const ext = selected.name.split(".").pop().toLowerCase();
       if (ext !== "pdf" && ext !== "doc" && ext !== "docx") {
-        setMessage("❌ শুধু PDF বা DOC ফাইল আপলোড করা যাবে!");
+        setMessage("❌ Only pdf and doc files can be uploaded!");
         setFile(null);
         return;
       }
@@ -31,10 +31,10 @@ export default function ResumePage() {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    if (!file) { setMessage("❌ আগে একটা ফাইল select করো!"); return; }
+    if (!file) { setMessage("❌ Select a file first!"); return; }
 
     setLoading(true);
-    setMessage("⏳ রিজিউমি আপলোড হচ্ছে...");
+    setMessage("⏳ Resume Uploading...");
 
     const token = localStorage.getItem("token");
     const formData = new FormData();
@@ -50,15 +50,15 @@ export default function ResumePage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setMessage(`❌ ${data.detail || "আপলোড ব্যর্থ!"}`);
+        setMessage(`❌ ${data.detail || "Upload Failled!"}`);
         return;
       }
 
       setResult(data.extracted_data);
-      setMessage("✅ রিজিউমি সফলভাবে বিশ্লেষণ হয়েছে!");
+      setMessage("✅ Resume Successfully Analyzed!");
 
     } catch {
-      setMessage("❌ সার্ভারের সাথে সংযোগ নেই!");
+      setMessage("❌ No connection to the server!");
     } finally {
       setLoading(false);
     }
@@ -68,17 +68,17 @@ export default function ResumePage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 p-4">
       <div className="max-w-3xl mx-auto">
         <div className="flex justify-between items-center mb-8 pt-6">
-          <h1 className="text-3xl font-bold text-white">📄 রিজিউমি আপলোড</h1>
+          <h1 className="text-3xl font-bold text-white">📄 Resume Upload</h1>
           <button onClick={() => router.push("/dashboard")}
             className="bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/40 text-blue-300 px-4 py-2 rounded-lg text-sm transition">
-            ← ড্যাশবোর্ড
+            ← Dashboard
           </button>
         </div>
 
         {/* Upload Card */}
         <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 shadow-2xl mb-6">
-          <h2 className="text-xl font-semibold text-white mb-2">আপনার রিজিউমি আপলোড করুন</h2>
-          <p className="text-blue-300 text-sm mb-6">PDF বা DOC ফরম্যাটে আপলোড করুন — AI স্বয়ংক্রিয়ভাবে স্কিল বিশ্লেষণ করবে</p>
+          <h2 className="text-xl font-semibold text-white mb-2">Upload your resume</h2>
+          <p className="text-blue-300 text-sm mb-6">Upload in PDF or DOC formate — AI will automatically analyze the skill</p>
 
           {message && (
             <div className={`px-4 py-3 rounded-lg mb-4 text-sm ${
@@ -100,8 +100,8 @@ export default function ResumePage() {
                 </div>
               ) : (
                 <div>
-                  <p className="text-white font-semibold">ফাইল select করতে ক্লিক করুন</p>
-                  <p className="text-blue-300 text-sm mt-1">PDF, DOC, DOCX সাপোর্টেড</p>
+                  <p className="text-white font-semibold">Click the select file</p>
+                  <p className="text-blue-300 text-sm mt-1">PDF, DOC, DOCX supported</p>
                 </div>
               )}
               <input id="fileInput" type="file" accept=".pdf,.doc,.docx"
@@ -110,7 +110,7 @@ export default function ResumePage() {
 
             <button type="submit" disabled={loading || !file}
               className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition">
-              {loading ? "⏳ AI বিশ্লেষণ করছে..." : "🚀 রিজিউমি আপলোড করুন"}
+              {loading ? "⏳ AI Analyzing..." : "🚀 Upload Resume"}
             </button>
           </form>
         </div>
@@ -118,12 +118,12 @@ export default function ResumePage() {
         {/* AI Result Card */}
         {result && (
           <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 shadow-2xl">
-            <h2 className="text-xl font-semibold text-white mb-6">🤖 AI বিশ্লেষণের ফলাফল</h2>
+            <h2 className="text-xl font-semibold text-white mb-6">🤖 AI analysis results</h2>
 
             {/* Skills */}
             {result.skills && result.skills.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-blue-300 text-sm font-semibold mb-3">💡 আপনার Skills:</h3>
+                <h3 className="text-blue-300 text-sm font-semibold mb-3">💡 Your Skills:</h3>
                 <div className="flex flex-wrap gap-2">
                   {result.skills.map((skill, i) => (
                     <span key={i} className="bg-blue-600/30 border border-blue-500/40 text-blue-200 px-3 py-1 rounded-full text-sm">
@@ -137,7 +137,7 @@ export default function ResumePage() {
             {/* Education */}
             {result.education && result.education.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-blue-300 text-sm font-semibold mb-3">🎓 শিক্ষাগত যোগ্যতা:</h3>
+                <h3 className="text-blue-300 text-sm font-semibold mb-3">🎓 Education:</h3>
                 {result.education.map((edu, i) => (
                   <div key={i} className="bg-white/5 rounded-xl p-4 mb-2">
                     <p className="text-white font-semibold">{edu.degree}</p>
@@ -150,7 +150,7 @@ export default function ResumePage() {
             {/* Experience */}
             {result.experience && result.experience.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-blue-300 text-sm font-semibold mb-3">💼 কাজের অভিজ্ঞতা:</h3>
+                <h3 className="text-blue-300 text-sm font-semibold mb-3">💼 Experience:</h3>
                 {result.experience.map((exp, i) => (
                   <div key={i} className="bg-white/5 rounded-xl p-4 mb-2">
                     <p className="text-white font-semibold">{exp.title}</p>
@@ -163,7 +163,7 @@ export default function ResumePage() {
             {/* Summary */}
             {result.summary && (
               <div>
-                <h3 className="text-blue-300 text-sm font-semibold mb-3">📝 সারসংক্ষেপ:</h3>
+                <h3 className="text-blue-300 text-sm font-semibold mb-3">📝 Summary:</h3>
                 <div className="bg-white/5 rounded-xl p-4">
                   <p className="text-white text-sm">{result.summary}</p>
                 </div>
