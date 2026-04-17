@@ -13,7 +13,7 @@ The system allows users to upload resumes, extract skills using AI, set career p
 
 ---
 
-## 🎯 Main Objectives
+##  Main Objectives
 
 - Provide a secure user registration and login system.
 - Extract skills and profile information from resumes using AI.
@@ -24,7 +24,7 @@ The system allows users to upload resumes, extract skills using AI, set career p
 
 ---
 
-## 👥 Team Members
+##  Team Members
 
 | Name | Role | Responsibilities |
 |---|---|---|
@@ -34,7 +34,7 @@ The system allows users to upload resumes, extract skills using AI, set career p
 
 ---
 
-## 🧩 Core Modules
+##  Core Modules
 
 ### Module 1: User Profile and Resume Management
 
@@ -65,7 +65,7 @@ The system allows users to upload resumes, extract skills using AI, set career p
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
 - Secure authentication system
 - Resume upload and parsing
@@ -117,7 +117,7 @@ The system allows users to upload resumes, extract skills using AI, set career p
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```text
 ai-job-platform/
